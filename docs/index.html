@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>stock-pilot</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --up: #0ca30c;
+    --down: #e66767;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--page); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px; line-height: 1.5;
+    padding: 16px 14px calc(40px + env(safe-area-inset-bottom));
+    max-width: 640px; margin: 0 auto;
+  }
+  header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  .updated { font-size: 12px; color: var(--muted); }
+  .regime { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); margin-bottom: 14px; }
+  .regime .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .regime.bullish .dot { background: var(--good); }
+  .regime.bearish .dot { background: var(--critical); }
+  .regime.neutral .dot { background: var(--warning); }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 22px 0 8px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px; margin-bottom: 10px;
+  }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .name { font-weight: 650; font-size: 16px; }
+  .code { color: var(--muted); font-size: 12px; margin-left: 6px; font-weight: 400; }
+  .ret { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ret.up { color: var(--up); } .ret.down { color: var(--down); }
+  .meta { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .thesis { font-size: 13px; color: var(--ink-2); margin-top: 8px; border-top: 1px solid var(--grid); padding-top: 8px; }
+  .spark { display: block; margin-top: 10px; width: 100%; height: 44px; }
+  .progress { height: 4px; background: var(--grid); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--series-1); border-radius: 2px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 10px; text-align: center; }
+  .tile .v { font-size: 22px; font-weight: 700; }
+  .tile .l { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+  .signal { border-color: rgba(57,135,229,0.45); }
+  .signal .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; color: var(--series-1); margin-bottom: 6px;
+  }
+  .btns { display: flex; gap: 8px; margin-top: 12px; }
+  button {
+    flex: 1; padding: 10px 0; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--grid); color: var(--ink); font-size: 13.5px; font-weight: 600;
+    font-family: inherit; cursor: pointer; min-height: 40px;
+  }
+  button.primary { background: var(--series-1); border-color: var(--series-1); }
+  button.danger { color: var(--serious); }
+  button:disabled { opacity: 0.5; }
+
+  .closed-row { display: flex; justify-content: space-between; padding: 9px 2px; border-bottom: 1px solid var(--grid); font-size: 13.5px; }
+  .closed-row:last-child { border-bottom: none; }
+  .verdict { font-size: 12px; font-weight: 700; }
+  .verdict.passed { color: var(--good); } .verdict.failed { color: var(--critical); }
+
+  .empty { color: var(--muted); font-size: 13.5px; padding: 14px; text-align: center; }
+  details.settings { margin-top: 28px; color: var(--muted); font-size: 13px; }
+  details.settings summary { cursor: pointer; }
+  details.settings input {
+    width: 100%; margin-top: 8px; padding: 10px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink); font-size: 13px;
+  }
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink);
+    padding: 10px 18px; border-radius: 999px; font-size: 13.5px; display: none;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5); white-space: nowrap;
+  }
+  #refresh { position: fixed; right: 14px; bottom: 20px; width: 44px; height: 44px; flex: none;
+    border-radius: 50%; font-size: 19px; background: var(--surface); }
+</style>
+</head>
+<body>
+<header>
+  <h1>stock-pilot</h1>
+  <span class="updated" id="updated">불러오는 중…</span>
+</header>
+<div class="regime" id="regime" style="display:none"><span class="dot"></span><span id="regimeText"></span></div>
+
+<div id="app"><div class="empty">데이터를 불러오는 중입니다…</div></div>
+
+<details class="settings">
+  <summary>설정 (조작 버튼용 GitHub 토큰)</summary>
+  <p style="margin-top:8px">종목 제외·승인 버튼을 쓰려면 fine-grained 토큰을 한 번 입력하세요. 이 기기 브라우저에만 저장됩니다.</p>
+  <input type="password" id="tokenInput" placeholder="github_pat_..." autocomplete="off">
+  <button style="margin-top:8px" onclick="saveToken()">저장</button>
+</details>
+
+<button id="refresh" onclick="load()" aria-label="새로고침">↻</button>
+<div class="toast" id="toast"></div>
+
+<script>
+const OWNER = location.hostname.endsWith('.github.io') ? location.hostname.split('.')[0] : 'Art-Web1104';
+const REPO = (location.pathname.split('/')[1]) || 'stock-pilot';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/data/control.json`;
+const fmt = n => n == null ? '—' : Number(n).toLocaleString('ko-KR');
+const pct = n => (n > 0 ? '+' : '') + Number(n).toFixed(2) + '%';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', 3200);
+}
+function saveToken() {
+  const v = document.getElementById('tokenInput').value.trim();
+  if (v) { localStorage.setItem('sp_token', v); toast('토큰을 저장했어요'); }
+}
+
+function spark(history) {
+  if (!history || history.length < 2) return '';
+  const vals = history.map(h => h.return_pct);
+  const min = Math.min(...vals, 0), max = Math.max(...vals, 0);
+  const W = 300, H = 44, pad = 3;
+  const x = i => pad + i * (W - 2 * pad) / (vals.length - 1);
+  const y = v => max === min ? H / 2 : pad + (max - v) * (H - 2 * pad) / (max - min);
+  const line = vals.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const zero = y(0);
+  const last = vals[vals.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="수익률 추이 ${pct(last)}">
+    <line x1="0" y1="${zero.toFixed(1)}" x2="${W}" y2="${zero.toFixed(1)}" stroke="var(--baseline)" stroke-width="1" stroke-dasharray="3 3"/>
+    <path d="${line}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${x(vals.length-1).toFixed(1)}" cy="${y(last).toFixed(1)}" r="3.5" fill="var(--series-1)" stroke="var(--surface)" stroke-width="2"/>
+  </svg>`;
+}
+
+async function command(action, code, name) {
+  const token = localStorage.getItem('sp_token');
+  if (!token) { toast('아래 설정에서 토큰을 먼저 입력하세요'); return; }
+  const labels = { exclude: '제외', approve: '매수 완료 처리', dismiss: '무시' };
+  if (!confirm(`${name} — ${labels[action]}할까요?\n(다음 세션 실행 시 반영됩니다)`)) return;
+  try {
+    const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' };
+    const cur = await (await fetch(API, { headers })).json();
+    if (!cur.content) throw new Error(cur.message || 'control.json을 읽지 못했어요');
+    const obj = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, '')))));
+    obj.commands.push({ id: 'cmd-' + Date.now(), date: new Date().toISOString(), action, code, name, processed: false });
+    const body = {
+      message: `dashboard: ${action} ${code}`,
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2)))),
+      sha: cur.sha,
+    };
+    const res = await fetch(API, { method: 'PUT', headers, body: JSON.stringify(body) });
+    if (!res.ok) throw new Error('저장 실패 (' + res.status + ')');
+    toast('접수 완료 — 다음 세션(평일 16:30)에 반영돼요');
+  } catch (e) { toast('오류: ' + e.message); }
+}
+
+function render(d) {
+  document.getElementById('updated').textContent =
+    d.generated ? new Date(d.generated).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' 기준' : '';
+  const regime = d.market && d.market.regime;
+  if (regime) {
+    const el = document.getElementById('regime');
+    el.style.display = 'inline-flex';
+    el.className = 'regime ' + regime;
+    const ko = { bullish: '강세장', neutral: '중립', bearish: '약세장' }[regime] || regime;
+    const sect = (d.market.favored_sectors || []).map(s => s.name).slice(0, 3).join(' · ');
+    document.getElementById('regimeText').textContent = `시장 국면: ${ko}${sect ? ' — 유망: ' + sect : ''}`;
+  }
+
+  let html = '';
+  const signals = d.signals || [];
+  html += '<h2>매수 검토 추천</h2>';
+  if (!signals.length) html += '<div class="card empty">검증을 통과한 신호가 아직 없어요</div>';
+  for (const s of signals) {
+    const v = s.verification || {};
+    html += `<div class="card signal">
+      <div class="badge">🎯 2주 검증 통과 · ${esc(s.date)}</div>
+      <div class="row"><span class="name">${esc(s.name)}<span class="code">${esc(s.code)}</span></span>
+        <span class="ret up">${pct(v.return_pct ?? 0)}</span></div>
+      <div class="meta">검증 ${v.days_held ?? '—'}거래일 · 기준가 <b>${fmt(s.ref_price)}원</b> · 최고 ${pct(v.max_return_pct ?? 0)} / 최저 ${pct(v.min_return_pct ?? 0)}</div>
+      <div class="thesis">${esc(s.thesis)}</div>
+      <div class="btns">
+        <button class="primary" onclick="command('approve','${esc(s.code)}','${esc(s.name)}')">매수함</button>
+        <button onclick="command('dismiss','${esc(s.code)}','${esc(s.name)}')">무시</button>
+        <button class="danger" onclick="command('exclude','${esc(s.code)}','${esc(s.name)}')">영구 제외</button>
+      </div></div>`;
+  }
+
+  const st = d.stats || {};
+  html += `<h2>성적</h2><div class="tiles">
+    <div class="tile"><div class="v">${(d.open_trades || []).length}</div><div class="l">검증 진행 중</div></div>
+    <div class="tile"><div class="v">${st.win_rate != null ? st.win_rate + '%' : '—'}</div><div class="l">검증 통과율 (${st.total_verified || 0}건)</div></div>
+    <div class="tile"><div class="v">${st.avg_return_passed != null ? pct(st.avg_return_passed) : '—'}</div><div class="l">통과 평균 수익률</div></div>
+  </div>`;
+
+  const open = d.open_trades || [];
+  html += '<h2>2주 검증 진행 중</h2>';
+  if (!open.length) html += '<div class="card empty">진행 중인 모의매매가 없어요<br>매일 18:00 차트 분석 세션이 종목을 편입합니다</div>';
+  for (const t of open) {
+    const dir = t.return_pct >= 0 ? 'up' : 'down';
+    html += `<div class="card">
+      <div class="row"><span class="name">${esc(t.name)}<span class="code">${esc(t.code)}</span></span>
+        <span class="ret ${dir}">${pct(t.return_pct)}</span></div>
+      <div class="meta">D+${t.days_held}/10 · 편입가 <b>${fmt(t.entry_price)}원</b> → 현재 <b>${fmt(t.last_price)}원</b> · 목표 +${t.target_pct}% / 손절 ${t.stop_pct}%</div>
+      ${spark(t.history)}
+      <div class="progress"><span style="width:${Math.min(100, t.days_held * 10)}%"></span></div>
+      <div class="thesis">${esc(t.thesis)}</div>
+      <div class="btns"><button class="danger" onclick="command('exclude','${esc(t.code)}','${esc(t.name)}')">검증 중단·제외</button></div>
+    </div>`;
+  }
+
+  const closed = d.recent_closed || [];
+  if (closed.length) {
+    html += '<h2>최근 검증 결과</h2><div class="card">';
+    for (const t of closed) {
+      const ko = t.status === 'passed' ? '✓ 통과' : '✕ 탈락';
+      html += `<div class="closed-row"><span>${esc(t.name)}<span class="code">${esc(t.closed)}</span></span>
+        <span><span class="ret ${t.return_pct >= 0 ? 'up' : 'down'}" style="margin-right:8px">${pct(t.return_pct)}</span>
+        <span class="verdict ${esc(t.status)}">${ko}</span></span></div>`;
+    }
+    html += '</div>';
+  }
+  document.getElementById('app').innerHTML = html;
+}
+
+async function load() {
+  try {
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
+    render(await res.json());
+  } catch (e) {
+    document.getElementById('app').innerHTML =
+      '<div class="card empty">아직 데이터가 없어요. 첫 세션이 실행되면 여기에 표시됩니다.</div>';
+  }
+}
+load();
+</script>
+</body>
+</html>

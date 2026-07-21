@@ -1,0 +1,22 @@
+{
+  "system_name": "stock-pilot",
+  "timezone": "Asia/Seoul",
+  "verification": {
+    "trading_days": 10,
+    "target_pct": 7.0,
+    "stop_pct": -5.0,
+    "pass_threshold_pct": 3.0
+  },
+  "limits": {
+    "max_open_trades": 10,
+    "max_new_entries_per_day": 2,
+    "min_market_cap_krw_bil": 300
+  },
+  "universe": {
+    "markets": [
+      "KOSPI",
+      "KOSDAQ"
+    ],
+    "exclude_codes": []
+  }
+}
