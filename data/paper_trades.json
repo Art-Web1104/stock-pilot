@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-22T18:12:44.577518+09:00",
+  "updated": "2026-07-23T16:50:15.406267+09:00",
   "trades": [
     {
       "id": "005830-2026-07-21",
@@ -11,7 +11,7 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 2,
+      "days_held": 3,
       "last_price": 165400,
       "return_pct": 2.29,
       "max_return_pct": 5.63,
@@ -26,6 +26,11 @@
         },
         {
           "date": "2026-07-22",
+          "close": 165400,
+          "return_pct": 2.29
+        },
+        {
+          "date": "2026-07-23",
           "close": 165400,
           "return_pct": 2.29
         }
@@ -47,11 +52,11 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 1,
-      "last_price": 146800,
-      "return_pct": 0.0,
+      "days_held": 2,
+      "last_price": 149800,
+      "return_pct": 2.04,
       "max_return_pct": 2.38,
-      "min_return_pct": -0.89,
+      "min_return_pct": -1.23,
       "closed": null,
       "close_reason": null,
       "history": [
@@ -59,6 +64,11 @@
           "date": "2026-07-22",
           "close": 146800,
           "return_pct": 0.0
+        },
+        {
+          "date": "2026-07-23",
+          "close": 149800,
+          "return_pct": 2.04
         }
       ],
       "thesis": "PER 8.16배 저평가 + 52주 고점(212,500) 대비 -30.9%로 상승여지 충분(52주 위치 42.8% 중단부). 2분기 영업이익 컨센서스 2조7,949억 원 견조, 미국 하이브리드 판매 +226%, 증권가 목표주가 240,000원. 현대차 급등(+4.76%) 후 순환매를 받는 저평가 후발주로, 시장 전체가 장중 +6.2%에서 +0.74%로 되돌린 날에도 +1.52% 양봉으로 시가 위 마감한 상대 강세 확인. 7/24 전후 2분기 실적 발표 촉매 임박.",
