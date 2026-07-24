@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-23T18:27:37.264086+09:00",
+  "updated": "2026-07-24T16:45:35.053004+09:00",
   "trades": [
     {
       "id": "005830-2026-07-21",
@@ -11,10 +11,10 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 3,
-      "last_price": 165400,
-      "return_pct": 2.29,
-      "max_return_pct": 5.63,
+      "days_held": 4,
+      "last_price": 167900,
+      "return_pct": 3.83,
+      "max_return_pct": 6.62,
       "min_return_pct": -4.39,
       "closed": null,
       "close_reason": null,
@@ -33,6 +33,11 @@
           "date": "2026-07-23",
           "close": 165400,
           "return_pct": 2.29
+        },
+        {
+          "date": "2026-07-24",
+          "close": 167900,
+          "return_pct": 3.83
         }
       ],
       "thesis": "PER 6.09배 저평가 + 2분기 투자손익 호조 전망(목표가 243,000~250,000원) + 기관 순매수 핵심 섹터(보험). 차트: 52주 범위(118,100~214,000) 내 45% 중단부로 고점 대비 -24.4% 상승여지 확보, 당일 갭하락 출발(154,700) 후 저가 154,600 지지 확인하고 165,100까지 끌어올려 161,700 상단 마감한 강한 회복 양봉 — 섹터 수급과 함께 반등 초입 판단.",
@@ -51,14 +56,14 @@
       "entry_price": 146800,
       "target_pct": 7.0,
       "stop_pct": -5.0,
-      "status": "open",
-      "days_held": 2,
-      "last_price": 149800,
-      "return_pct": 2.04,
+      "status": "failed",
+      "days_held": 3,
+      "last_price": 130500,
+      "return_pct": -11.1,
       "max_return_pct": 2.38,
-      "min_return_pct": -1.23,
-      "closed": null,
-      "close_reason": null,
+      "min_return_pct": -11.78,
+      "closed": "2026-07-24",
+      "close_reason": "손절선 -5.0% 터치 (최저 -11.78%)",
       "history": [
         {
           "date": "2026-07-22",
@@ -69,6 +74,11 @@
           "date": "2026-07-23",
           "close": 149800,
           "return_pct": 2.04
+        },
+        {
+          "date": "2026-07-24",
+          "close": 130500,
+          "return_pct": -11.1
         }
       ],
       "thesis": "PER 8.16배 저평가 + 52주 고점(212,500) 대비 -30.9%로 상승여지 충분(52주 위치 42.8% 중단부). 2분기 영업이익 컨센서스 2조7,949억 원 견조, 미국 하이브리드 판매 +226%, 증권가 목표주가 240,000원. 현대차 급등(+4.76%) 후 순환매를 받는 저평가 후발주로, 시장 전체가 장중 +6.2%에서 +0.74%로 되돌린 날에도 +1.52% 양봉으로 시가 위 마감한 상대 강세 확인. 7/24 전후 2분기 실적 발표 촉매 임박.",
@@ -87,19 +97,24 @@
       "entry_price": 110100,
       "target_pct": 7.0,
       "stop_pct": -5.0,
-      "status": "open",
-      "days_held": 1,
-      "last_price": 110100,
-      "return_pct": 0.0,
+      "status": "failed",
+      "days_held": 2,
+      "last_price": 100000,
+      "return_pct": -9.17,
       "max_return_pct": 0.82,
-      "min_return_pct": -4.45,
-      "closed": null,
-      "close_reason": null,
+      "min_return_pct": -9.63,
+      "closed": "2026-07-24",
+      "close_reason": "손절선 -5.0% 터치 (최저 -9.63%)",
       "history": [
         {
           "date": "2026-07-23",
           "close": 110100,
           "return_pct": 0.0
+        },
+        {
+          "date": "2026-07-24",
+          "close": 100000,
+          "return_pct": -9.17
         }
       ],
       "thesis": "PER 15.3배 저평가 + 8인치 파운드리 가동률 98%·전력반도체 가격 인상·2분기 실적 청신호로 실적 모멘텀 강화, 52주 고점 대비 -52% 눌림. 차트: 3일 연속 종가 상승(104,700→105,900→110,100)에 105,000원대 지지 재확인 후 위꼬리 거의 없는 양봉으로 전일 매물대 하단(110,100) 회복 — 바닥 다지기 후 반등 초입 판단.",
