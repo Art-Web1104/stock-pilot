@@ -6,3 +6,7 @@
   ```
   git -c http.extraheader="Authorization: Basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)" push origin main
   ```
+
+## 2026-08-06 세션 C
+- 구글 파이낸스 WebFetch 정상 작동(7종목, 429/차단 없음) — 8/5의 차단은 일시적이었음.
+- git push 403 재발 → 위 08-05 메모의 extraheader 방식으로 해결(재현성 확인됨). API(contents) 방식은 프록시가 차단하므로 시도 불필요.
