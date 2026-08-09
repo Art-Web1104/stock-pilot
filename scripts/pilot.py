@@ -328,6 +328,122 @@ def status():
     })
 
 
+# ---------------------------------------------------------------- portfolio
+
+FEE_RATE = 0.00015      # 매매 수수료 0.015%
+SELL_TAX = 0.0015       # 매도 시 거래세+농특세 근사 0.15%
+
+
+def _pf():
+    return load("data/portfolio.json", {
+        "initial_capital": 1000000, "start_date": None,
+        "cash": 1000000, "positions": [], "log": [], "daily_value": [],
+    })
+
+
+def portfolio_buy():
+    """stdin: {"code","name","price","amount"(원) 또는 "qty","reason"}"""
+    pf = _pf()
+    r = json.load(sys.stdin)
+    code = str(r["code"]).zfill(6)
+    price = int(r["price"])
+    qty = int(r.get("qty") or (int(r.get("amount", 0)) // price))
+    if qty < 1:
+        out({"ok": False, "reason": "수량 0 — 금액이 주가보다 작음"})
+        return
+    cost = qty * price
+    fee = round(cost * FEE_RATE)
+    if cost + fee > pf["cash"]:
+        qty = int((pf["cash"] / (1 + FEE_RATE)) // price)
+        if qty < 1:
+            out({"ok": False, "reason": f"현금 부족 (보유 {pf['cash']}원)"})
+            return
+        cost = qty * price
+        fee = round(cost * FEE_RATE)
+    pf["cash"] -= cost + fee
+    pos = next((p for p in pf["positions"] if p["code"] == code), None)
+    if pos:
+        total = pos["qty"] * pos["avg_price"] + cost
+        pos["qty"] += qty
+        pos["avg_price"] = round(total / pos["qty"], 2)
+    else:
+        pf["positions"].append({"code": code, "name": r["name"], "qty": qty,
+                                "avg_price": price, "opened": today()})
+    pf["log"].append({"date": today(), "side": "buy", "code": code, "name": r["name"],
+                      "qty": qty, "price": price, "amount": cost, "fee": fee,
+                      "reason": r.get("reason", "")})
+    if not pf["start_date"]:
+        pf["start_date"] = today()
+    save("data/portfolio.json", pf)
+    out({"ok": True, "bought": code, "qty": qty, "price": price,
+         "spent": cost + fee, "cash_left": pf["cash"]})
+
+
+def portfolio_sell():
+    """stdin: {"code","price","reason","qty"?(생략 시 전량)}"""
+    pf = _pf()
+    r = json.load(sys.stdin)
+    code = str(r["code"]).zfill(6)
+    price = int(r["price"])
+    pos = next((p for p in pf["positions"] if p["code"] == code), None)
+    if not pos:
+        out({"ok": False, "reason": f"{code} 미보유"})
+        return
+    qty = int(r.get("qty") or pos["qty"])
+    qty = min(qty, pos["qty"])
+    proceeds = qty * price
+    fee = round(proceeds * FEE_RATE)
+    tax = round(proceeds * SELL_TAX)
+    pf["cash"] += proceeds - fee - tax
+    pnl = round((price - pos["avg_price"]) * qty - fee - tax)
+    pnl_pct = round((price - pos["avg_price"]) / pos["avg_price"] * 100, 2)
+    pos["qty"] -= qty
+    if pos["qty"] == 0:
+        pf["positions"] = [p for p in pf["positions"] if p["code"] != code]
+    pf["log"].append({"date": today(), "side": "sell", "code": code, "name": pos["name"],
+                      "qty": qty, "price": price, "amount": proceeds, "fee": fee + tax,
+                      "pnl": pnl, "pnl_pct": pnl_pct, "reason": r.get("reason", "")})
+    save("data/portfolio.json", pf)
+    out({"ok": True, "sold": code, "qty": qty, "price": price,
+         "pnl": pnl, "pnl_pct": pnl_pct, "cash": pf["cash"]})
+
+
+def portfolio_value():
+    """stdin: [{"code","close"}] — 보유 종목 평가액 기록"""
+    pf = _pf()
+    rows = json.load(sys.stdin)
+    pm = {str(x["code"]).zfill(6): x["close"] for x in rows}
+    stocks = 0
+    detail = []
+    missing = []
+    for p in pf["positions"]:
+        c = pm.get(p["code"])
+        if c is None:
+            missing.append(p["code"])
+            c = p["avg_price"]
+        v = p["qty"] * c
+        stocks += v
+        detail.append({"code": p["code"], "name": p["name"], "qty": p["qty"],
+                       "avg_price": p["avg_price"], "close": c, "value": v,
+                       "pnl_pct": round((c - p["avg_price"]) / p["avg_price"] * 100, 2)})
+    total = stocks + pf["cash"]
+    ret = round((total - pf["initial_capital"]) / pf["initial_capital"] * 100, 2)
+    pf["daily_value"] = [d for d in pf["daily_value"] if d["date"] != today()]
+    pf["daily_value"].append({"date": today(), "stocks_value": stocks,
+                              "cash": pf["cash"], "total": total, "return_pct": ret})
+    save("data/portfolio.json", pf)
+    out({"date": today(), "total": total, "cash": pf["cash"], "return_pct": ret,
+         "positions": detail, "price_missing": missing})
+
+
+def portfolio_status():
+    pf = _pf()
+    out({"initial": pf["initial_capital"], "start_date": pf["start_date"],
+         "cash": pf["cash"], "positions": pf["positions"],
+         "last_value": pf["daily_value"][-1] if pf["daily_value"] else None,
+         "trades_count": len(pf["log"])})
+
+
 COMMANDS = {
     "record-prices": record_prices,
     "open-trade": open_trade,
@@ -335,6 +451,10 @@ COMMANDS = {
     "process-control": process_control,
     "dashboard": dashboard,
     "status": status,
+    "portfolio-buy": portfolio_buy,
+    "portfolio-sell": portfolio_sell,
+    "portfolio-value": portfolio_value,
+    "portfolio-status": portfolio_status,
 }
 
 if __name__ == "__main__":

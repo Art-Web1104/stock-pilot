@@ -43,7 +43,8 @@
    }
    ```
    같은 내용을 `.md` 보고서로도 저장.
-6. 대시보드 갱신: `python3 scripts/pilot.py dashboard`
+6. **포트폴리오 매수**: `prompts/portfolio.md`를 읽고, 오늘 편입한 종목과 미보유 활성 신호 종목을 매수한다.
+7. 대시보드 갱신: `python3 scripts/pilot.py dashboard`
 7. 커밋·푸시 후 요약: 신규 편입 종목(있으면 맨 앞에, 편입가 포함), watch/reject 사유 한 줄씩.
 
 ## 주의
