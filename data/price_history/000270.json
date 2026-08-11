@@ -64,6 +64,13 @@
       "high": 136200,
       "low": 132800,
       "close": 135500
+    },
+    {
+      "date": "2026-08-11",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 134300
     }
   ]
 }
