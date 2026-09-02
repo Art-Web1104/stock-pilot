@@ -516,6 +516,13 @@
       "cash": 624824,
       "total": 1045924,
       "return_pct": 4.59
+    },
+    {
+      "date": "2026-09-02",
+      "stocks_value": 854610,
+      "cash": 168396,
+      "total": 1023006,
+      "return_pct": 2.3
     }
   ]
 }

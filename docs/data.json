@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-01T18:15:50.189850+09:00",
+  "generated": "2026-09-02T17:57:53.014878+09:00",
   "market": {
     "date": "2026-09-01",
     "kospi": {
@@ -343,10 +343,10 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 3,
-      "last_price": 128100,
-      "return_pct": -1.84,
-      "max_return_pct": 0.08,
+      "days_held": 4,
+      "last_price": 127000,
+      "return_pct": -2.68,
+      "max_return_pct": 1.07,
       "min_return_pct": -3.83,
       "closed": null,
       "close_reason": null,
@@ -365,6 +365,11 @@
           "date": "2026-09-01",
           "close": 128100,
           "return_pct": -1.84
+        },
+        {
+          "date": "2026-09-02",
+          "close": 127000,
+          "return_pct": -2.68
         }
       ],
       "thesis": "3Q 이연 매출(독감백신 WHO 균주 변경·헌터라제 수출)+큐레보 매각차익 약 3,000억 반영이라는 금리 무관 변곡점, 52주 고점 대비 -29.0%·범위 내 하단부(31.6%). 차트: 8/25 세션이 걸어둔 편입 조건(124,000~126,000 저점 방어+양봉) 충족 — 8/25 저가 124,000, 8/28 저가 125,500으로 사흘째 저점 방어 후 시가 126,300→종가 130,500(+2.68%) 고가 부근 마감 양봉. 코스피 -1.83% 급락일 역행 강세로 수급 이탈 없음 확인",
@@ -384,11 +389,11 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 2,
-      "last_price": 1693000,
-      "return_pct": 1.14,
+      "days_held": 3,
+      "last_price": 1613000,
+      "return_pct": -3.64,
       "max_return_pct": 2.33,
-      "min_return_pct": -1.31,
+      "min_return_pct": -3.7,
       "closed": null,
       "close_reason": null,
       "history": [
@@ -401,6 +406,11 @@
           "date": "2026-09-01",
           "close": 1693000,
           "return_pct": 1.14
+        },
+        {
+          "date": "2026-09-02",
+          "close": 1613000,
+          "return_pct": -3.64
         }
       ],
       "thesis": "고점 -44%·PER 저평가 + 40조 자사주 매입(11/19까지)의 하방 지지가 잭슨홀 매파 쇼크에서 실증됨. 차트: -2.6% 갭하락(저가 1,577,000)을 당일 전량 되돌려 전일 종가 위 1,674,000 마감 — 긴 아랫꼬리 반전 양봉, 8/28 watch 조건(이벤트 통과 후 반등 캔들) 충족",
@@ -421,11 +431,11 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 1,
-      "last_price": 261000,
-      "return_pct": 0.0,
+      "days_held": 2,
+      "last_price": 250500,
+      "return_pct": -4.02,
       "max_return_pct": 0.57,
-      "min_return_pct": -2.68,
+      "min_return_pct": -4.41,
       "closed": null,
       "close_reason": null,
       "history": [
@@ -433,6 +443,11 @@
           "date": "2026-09-01",
           "close": 261000,
           "return_pct": 0.0
+        },
+        {
+          "date": "2026-09-02",
+          "close": 250500,
+          "return_pct": -4.02
         }
       ],
       "thesis": "회사분석 1순위(8점): 52주 고점 -30.3%·검증 PER 11.61 저평가, 자사주 매입이 하방 지지 실증, 8월 반도체 수출 역대 최대. 차트: 8/31 watch 조건(255~257k 지지 재확인+종가 257k 위)의 실질 충족 — 이란발 갭하락(시가 256,500)으로 지지선을 직접 시험했으나 저가 254,000에서 되돌려 고가 부근 261,000(+0.38%) 마감, 종가 3일 연속 상승(257,000→260,000→261,000)",
@@ -452,9 +467,9 @@
       "target_pct": 7.0,
       "stop_pct": -5.0,
       "status": "open",
-      "days_held": 1,
-      "last_price": 5920,
-      "return_pct": 0.0,
+      "days_held": 2,
+      "last_price": 5770,
+      "return_pct": -2.53,
       "max_return_pct": 2.2,
       "min_return_pct": -3.04,
       "closed": null,
@@ -464,6 +479,11 @@
           "date": "2026-09-01",
           "close": 5920,
           "return_pct": 0.0
+        },
+        {
+          "date": "2026-09-02",
+          "close": 5770,
+          "return_pct": -2.53
         }
       ],
       "thesis": "회사분석 3순위(6점): PER 5.09(구글)·PBR 약 0.39, 52주 고점 7,560원 대비 -21.7% 저평가에 금리 인상 사이클의 이차마진·K-ICS 직접 수혜, DB손보 밸류업 발표 확산 기대. 차트: 8/14 급등(+11.9%, 5,630) 후 -9% 눌림에서 저점을 높이며(5,120→5,100→5,240→5,370) 바닥 다지기, 9/1 보험 +2.15% 랠리 속 양봉으로 전 고점 돌파(종가 5,920>5,630)",
